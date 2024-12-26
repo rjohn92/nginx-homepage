@@ -1,0 +1,23 @@
+# Ignore .env file containing sensitive environment variables
+.env
+
+# Ignore SSL certificates
+ssl/
+*.crt
+*.key
+
+# Ignore Nginx logs
+logs/
+*.log
+
+# Ignore Docker-related files
+.docker/
+docker-compose.override.yml
+docker-compose.yml
+
+# Ignore temporary files created by IDEs (e.g., VSCode, JetBrains)
+.vscode/
+.idea/
+
+# Ignore any other generated or sensitive files
+*.swp  # Swap files from editors like vim

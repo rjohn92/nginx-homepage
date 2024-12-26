@@ -1,0 +1,231 @@
+# Generating a plain text file for the full README as requested.
+readme_content = """
+Nginx Reverse Proxy with SSL for Plex, qBittorrentVPN, Radarr, and Portainer
+
+This project configures Nginx as a reverse proxy with SSL for several services running in Docker containers, including Plex, qBittorrentVPN, Radarr, and Portainer. It also serves a custom landing page as the root of your Nginx server and ensures that these services are only accessible through Nginx for security.
+
+Table of Contents
+
+Prerequisites
+Project Structure
+Step 1: Create a Self-Signed SSL Certificate
+Step 2: Docker Compose Configuration
+Step 3: Nginx Configuration
+Step 4: Configure Firewall (UFW)
+Step 5: Start the Nginx Proxy
+Step 6: Access Your Services
+Step 7: Disable Direct Port Access for Security
+Step 8: Troubleshooting
+
+Prerequisites
+
+Before starting, ensure you have the following installed on your system:
+
+Docker
+Docker Compose
+Basic understanding of Docker networks
+A valid SSL certificate (self-signed or other)
+
+Project Structure
+
+Here's the folder structure of your project:
+
+nginx-proxy/
+├── config
+│   └── nginx.conf         # Nginx configuration
+├── docker-compose.yml     # Docker Compose file
+├── ssl
+│   ├── selfsigned.crt     # SSL Certificate
+│   └── selfsigned.key     # SSL Key
+└── webpage
+    └── index.html         # Landing page for Nginx
+
+Step 1: Create a Self-Signed SSL Certificate
+
+If you're using a self-signed certificate, create one using the following command:
+
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+-keyout ./ssl/selfsigned.key -out ./ssl/selfsigned.crt
+
+When prompted, fill in the relevant details (country, state, etc.). This generates an SSL certificate (selfsigned.crt) and a private key (selfsigned.key) that will be used by Nginx.
+
+Step 2: Docker Compose Configuration
+
+Create the docker-compose.yml file to set up Nginx as a reverse proxy and link it to your Docker networks:
+
+version: '3'
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /home/home-server/Containers/nginx-proxy/config/nginx.conf:/etc/nginx/conf.d/default.conf  # Correct location
+      - /home/home-server/Containers/nginx-proxy/ssl:/etc/nginx/ssl  # SSL Certificates
+      - /home/home-server/Containers/nginx-proxy/webpage:/usr/share/nginx/html  # Mount your webpage folder
+    restart: unless-stopped
+    networks:
+      - mediamanagement_default
+      - plex_default
+      - portainer_network
+
+networks:
+  mediamanagement_default:
+    external: true
+  plex_default:
+    external: true
+  portainer_network:
+    external: true
+
+Explanation
+
+Volumes:
+nginx.conf maps to Nginx’s configuration file.
+ssl maps the SSL certificate files.
+webpage maps to the directory serving the custom landing page.
+Ports:
+Port 80 for HTTP (redirected to HTTPS).
+Port 443 for HTTPS.
+Networks: Nginx connects to your defined Docker networks (e.g., mediamanagement_default, plex_default, and portainer_network).
+
+Step 3: Nginx Configuration
+
+Here is the nginx.conf file, which handles the reverse proxy and serves a landing page:
+
+server {
+    listen 443 ssl;
+    server_name 10.0.0.146;
+
+    ssl_certificate /etc/nginx/ssl/selfsigned.crt;
+    ssl_certificate_key /etc/nginx/ssl/selfsigned.key;
+
+    # Serve the landing page on the root URL
+    location / {
+        root /usr/share/nginx/html;
+        index index.html;
+    }
+
+    # Reverse proxy for Portainer
+    location /portainer/ {
+        proxy_pass http://portainer:9000/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+
+        proxy_buffering off;
+    }
+
+    # Reverse proxy for Plex
+    location /plex/ {
+        proxy_pass http://plex:32400/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+
+        proxy_buffering off;
+    }
+
+    # Reverse proxy for qBittorrentVPN
+    location /qbittorrentvpn/ {
+        proxy_pass http://qbittorrentvpn:8080/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        client_max_body_size 100M;
+        proxy_cookie_path / "/; Secure";
+    }
+
+    # Reverse proxy for Radarr
+    location /radarr/ {
+        proxy_pass http://radarr:7878/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+
+        proxy_buffering off;
+    }
+}
+
+server {
+    listen 80;
+    server_name 10.0.0.146;
+
+    # Redirect HTTP to HTTPS
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+Step 4: Configure Firewall (UFW)
+
+If you're using UFW (Uncomplicated Firewall), you need to allow Nginx traffic and ensure that specific ports are closed for direct access.
+
+To allow Nginx traffic:
+
+sudo ufw allow 'Nginx Full'
+
+To disable access to ports like 8080 (qBittorrentVPN) and 9000 (Portainer):
+
+sudo ufw deny 8080
+sudo ufw deny 9000
+
+This ensures that these services are only accessible via Nginx and not directly through the open ports.
+
+Step 5: Start the Nginx Proxy
+
+Once the configuration is done, start the Nginx container with Docker Compose:
+
+docker-compose up -d
+
+Step 6: Access Your Services
+
+Now, you can access your services through the reverse proxy:
+
+- Plex: `https://your_domain_or_ip/plex/`
+- qBittorrentVPN: `https://your_domain_or_ip/qbittorrentvpn/`
+- Radarr: `https://your_domain_or_ip/radarr/`
+- Portainer: `https://your_domain_or_ip/portainer/`
+
+Step 7: Disable Direct Port Access for Security
+
+Ensure that direct access to services via ports (e.g., 8080, 9000) is disabled by removing or denying them in your firewall.
+
+Step 8: Troubleshooting
+
+If you encounter issues:
+
+- Ensure your firewall is correctly configured.
+- Use `docker logs nginx-proxy` to debug any Nginx-related errors.
+- Ensure that each container service is correctly attached to the proper network.
+"""
+
+# Save the content to a file
+file_path = "/mnt/data/nginx_reverse_proxy_README.txt"
+with open(file_path, "w") as file:
+    file.write(readme_content)
+
+file_path
