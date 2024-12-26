@@ -1,0 +1,38 @@
+version: '3'
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    environment:
+      - NGINX_SERVER_NAME=${NGINX_SERVER_NAME}
+      - CONTAINERS_LOCATION=${CONTAINERS_LOCATION}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./webpage:/usr/share/nginx/html  # Mount your webpage to the HTML directory
+      - ./config/nginx.conf:/etc/nginx/nginx.conf  # Main Nginx configuration
+      - ./config/snippets:/etc/nginx/config/snippets  # Mount the snippets directory
+      - ./config/upstreams:/etc/nginx/config/upstreams
+      - ./config/locations:/etc/nginx/config/locations
+      - ./ssl:/etc/nginx/ssl
+      - ../fail2ban/remotelogs/nginx:/var/log/nginx
+      - ${CONTAINERS_LOCATION}/network-map/public/:/public/network-map  # Ensure this matches the alias path
+    restart: unless-stopped
+    networks:
+      - mediamanagement_default
+      - plex_default
+      - portainer_network
+      - network-map_default
+      - pihole_default
+networks:
+  mediamanagement_default:
+    external: true
+  plex_default:
+    external: true
+  portainer_network:
+    external: true
+  network-map_default:
+    external: true
+  pihole_default:
+    external: true
