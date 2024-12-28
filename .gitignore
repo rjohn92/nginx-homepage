@@ -13,7 +13,7 @@ logs/
 # Ignore Docker-related files
 .docker/
 docker-compose.override.yml
-docker-compose.yml
+
 
 # Ignore temporary files created by IDEs (e.g., VSCode, JetBrains)
 .vscode/
