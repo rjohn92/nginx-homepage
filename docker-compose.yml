@@ -17,7 +17,7 @@ services:
       - ./config/locations:/etc/nginx/config/locations
       - ./ssl:/etc/nginx/ssl
       - ../fail2ban/remotelogs/nginx:/var/log/nginx
-      - ${CONTAINERS_LOCATION}/network-map/public/:/public/network-map  # Ensure this matches the alias path
+#      - ${CONTAINERS_LOCATION}/network-map/public/:/public/network-map  # Ensure this matches the alias path
     restart: unless-stopped
     networks:
       - mediamanagement_default

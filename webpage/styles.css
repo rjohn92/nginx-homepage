@@ -15,6 +15,11 @@ h1 {
     color: #333;
 }
 
+h2 {
+    margin-bottom: 8px;
+    color: #333;
+}
+
 .service-links {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -50,3 +55,19 @@ footer {
     margin-top: 20px;
     color: #777;
 }
+
+.error-code {
+    font-size: 72px;
+    color: #e74c3c;
+}
+
+.error-message {
+    font-size: 18px;
+    color: #000000;
+    margin-bottom: 20px;
+}
+
+.error-banner {
+    font-size: 24px;
+    color: #000000;
+    margin-bottom: 20px;
