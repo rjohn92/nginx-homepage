@@ -10,20 +10,29 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./webpage:/usr/share/nginx/html  # Mount your webpage to the HTML directory
+      - ./web:/usr/share/nginx/html  # Mount your web to the HTML directory
       - ./config/nginx.conf:/etc/nginx/nginx.conf  # Main Nginx configuration
       - ./config/snippets:/etc/nginx/config/snippets  # Mount the snippets directory
       - ./config/upstreams:/etc/nginx/config/upstreams
       - ./config/locations:/etc/nginx/config/locations
-      - ./ssl:/etc/nginx/ssl
+      - ./ssl:/etc/nginx/ssl # certificate location
       - ../fail2ban/remotelogs/nginx:/var/log/nginx
     restart: unless-stopped
     networks:
       - mediamanagement_default
       - plex_default
       - portainer_network
-      - network-map_default
+      # - network-map_default
       - pihole_default
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - ./certs:/etc/letsencrypt
+      - ./web:/usr/share/nginx/html
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do sleep 2073600; done'"
+    restart: unless-stopped
+
 networks:
   mediamanagement_default:
     external: true
