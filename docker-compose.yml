@@ -18,7 +18,13 @@ services:
       - ./ssl:/etc/nginx/ssl # certificate location
       - ./certs:/etc/letsencrypt # Certbot certificates
       - ../fail2ban/remotelogs/nginx:/var/log/nginx
+
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     networks:
       - mediamanagement_default
       - plex_default
@@ -26,15 +32,21 @@ services:
       - network-map_default
       - pihole_default
       - bibliomane_default
+      - nginx-proxy_default
 
   certbot:
     image: certbot/certbot
     container_name: certbot
+    depends_on:
+      nginx:
+          condition: service_healthy
     volumes:
       - ./certs:/etc/letsencrypt
       - ./webpage:/usr/share/nginx/html
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-    restart: unless-stopped
+    command: certonly --webroot -w /usr/share/nginx/html -d arjayserver.duckdns.org --non-interactive --agree-tos --email ${EMAIL}
+    # restart: unless-stopped
+    networks:
+      - nginx-proxy_default
 
 networks:
   mediamanagement_default:
@@ -49,3 +61,6 @@ networks:
     external: true
   bibliomane_default:
     external: true
+  nginx-proxy_default:
+    external: true
+

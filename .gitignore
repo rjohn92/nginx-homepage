@@ -6,9 +6,15 @@ ssl/
 *.crt
 *.key
 
+# Don't push certs
+certs/
+
 # Ignore Nginx logs
 logs/
 *.log
+
+# Ignore Nginx logging location
+nginx/
 
 # Ignore Docker-related files
 .docker/
