@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 services:
   nginx:
     image: nginx:latest
@@ -15,7 +15,7 @@ services:
       - ./config/snippets:/etc/nginx/config/snippets  # Mount the snippets directory
       - ./config/upstreams:/etc/nginx/config/upstreams
       - ./config/locations:/etc/nginx/config/locations
-      - ./ssl:/etc/nginx/ssl # certificate location
+     # - ./ssl:/etc/nginx/ssl # certificate location
       - ./certs:/etc/letsencrypt # Certbot certificates
       - ../fail2ban/remotelogs/nginx:/var/log/nginx
 
@@ -33,20 +33,22 @@ services:
       - pihole_default
       - bibliomane_default
       - nginx-proxy_default
+      - containers_keycloak_network
 
   certbot:
     image: certbot/certbot
     container_name: certbot
     depends_on:
       nginx:
-          condition: service_healthy
+        condition: service_healthy
     volumes:
       - ./certs:/etc/letsencrypt
       - ./webpage:/usr/share/nginx/html
-    command: certonly --webroot -w /usr/share/nginx/html -d arjayserver.duckdns.org --non-interactive --agree-tos --email ${EMAIL}
-    # restart: unless-stopped
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --webroot -w /usr/share/nginx/html --quiet && sleep 12h & wait $${!}; done'"
+    restart: unless-stopped
     networks:
       - nginx-proxy_default
+
 
 networks:
   mediamanagement_default:
@@ -63,4 +65,5 @@ networks:
     external: true
   nginx-proxy_default:
     external: true
-
+  containers_keycloak_network:
+    external: true
