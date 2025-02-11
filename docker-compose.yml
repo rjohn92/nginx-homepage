@@ -33,7 +33,7 @@ services:
       - pihole_default
       - bibliomane_default
       - nginx-proxy_default
-      - containers_keycloak_network
+      - keycloak_oauth2_network
 
   certbot:
     image: certbot/certbot
@@ -65,5 +65,5 @@ networks:
     external: true
   nginx-proxy_default:
     external: true
-  containers_keycloak_network:
+  keycloak_oauth2_network:
     external: true

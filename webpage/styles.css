@@ -1,74 +1,105 @@
+/* General Page Styling */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     height: 100vh;
-}
-
-h1 {
-    margin-bottom: 20px;
-    color: #333;
-}
-
-h2 {
-    margin-bottom: 8px;
-    color: #333;
-}
-
-.service-links {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    background: #fff;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.service {
-    background-color: #e9ecef;
-    padding: 15px;
-    border-radius: 8px;
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
     text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 150px;
+    margin: 0;
+    padding: 20px;
 }
 
-.service a {
-    text-decoration: none;
+/* Main Error Container */
+.error-container {
+    background: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 600px;
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Error Code Styling */
+.error-code {
+    font-size: 72px;
+    font-weight: bold;
+    color: #e74c3c;
+    margin-bottom: 10px;
+}
+
+/* Main Banner */
+.error-banner {
+    font-size: 26px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+/* Description Message */
+.error-message {
     font-size: 18px;
-    color: #007bff;
+    color: #6c757d;
+    margin-bottom: 20px;
 }
 
-.service a:hover {
-    text-decoration: underline;
+/* Button Styling */
+.back-link {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 18px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s ease, transform 0.2s ease-in-out;
 }
 
+.back-link:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* Footer */
 footer {
     margin-top: 20px;
+    font-size: 14px;
     color: #777;
 }
 
-.error-code {
-    font-size: 72px;
-    color: #e74c3c;
+/* Responsive Fixes for Larger Screens */
+@media (min-width: 768px) {
+    .error-container {
+        padding: 50px;
+        max-width: 700px;
+    }
+
+    .error-code {
+        font-size: 80px;
+    }
+
+    .error-banner {
+        font-size: 28px;
+    }
+
+    .error-message {
+        font-size: 20px;
+    }
 }
 
-.error-message {
-    font-size: 18px;
-    color: #000000;
-    margin-bottom: 20px;
-}
+@media (min-width: 1024px) {
+    .error-container {
+        max-width: 800px;
+    }
 
-.error-banner {
-    font-size: 24px;
-    color: #000000;
-    margin-bottom: 20px;
+    .error-code {
+        font-size: 90px;
+    }
+
+    .error-banner {
+        font-size: 30px;
+    }
 }

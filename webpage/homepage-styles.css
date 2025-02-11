@@ -1,0 +1,72 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Container for services */
+.service-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Adapts dynamically */
+    gap: 20px;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 80%; /* Adjusted for better desktop display */
+    max-width: 900px; /* Prevents stretching too wide */
+}
+
+/* Individual Service Boxes */
+.service {
+    background-color: #007bff;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.service a {
+    text-decoration: none;
+    font-size: 18px;
+    color: white;
+    font-weight: bold;
+    display: block;
+    padding: 12px 0;
+}
+
+/* Hover Effect */
+.service:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* Responsive Fix for Larger Screens */
+@media (min-width: 768px) {
+    .service-links {
+        grid-template-columns: repeat(3, 1fr); /* 3 columns on larger screens */
+        padding: 40px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .service-links {
+        grid-template-columns: repeat(4, 1fr); /* 4 columns for large screens */
+        max-width: 1100px;
+    }
+}
+
+/* Footer */
+footer {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #777;
+}
