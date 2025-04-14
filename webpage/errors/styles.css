@@ -1,0 +1,105 @@
+/* General Page Styling */
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Main Error Container */
+.error-container {
+    background: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 600px;
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Error Code Styling */
+.error-code {
+    font-size: 72px;
+    font-weight: bold;
+    color: #e74c3c;
+    margin-bottom: 10px;
+}
+
+/* Main Banner */
+.error-banner {
+    font-size: 26px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+/* Description Message */
+.error-message {
+    font-size: 18px;
+    color: #6c757d;
+    margin-bottom: 20px;
+}
+
+/* Button Styling */
+.back-link {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 18px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s ease, transform 0.2s ease-in-out;
+}
+
+.back-link:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* Footer */
+footer {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #777;
+}
+
+/* Responsive Fixes for Larger Screens */
+@media (min-width: 768px) {
+    .error-container {
+        padding: 50px;
+        max-width: 700px;
+    }
+
+    .error-code {
+        font-size: 80px;
+    }
+
+    .error-banner {
+        font-size: 28px;
+    }
+
+    .error-message {
+        font-size: 20px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .error-container {
+        max-width: 800px;
+    }
+
+    .error-code {
+        font-size: 90px;
+    }
+
+    .error-banner {
+        font-size: 30px;
+    }
+}

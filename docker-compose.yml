@@ -15,10 +15,9 @@ services:
       - ./config/snippets:/etc/nginx/config/snippets  # Mount the snippets directory
       - ./config/upstreams:/etc/nginx/config/upstreams
       - ./config/locations:/etc/nginx/config/locations
-     # - ./ssl:/etc/nginx/ssl # certificate location
+      - ./config/authentication:/etc/nginx/config/authentication
       - ./certs:/etc/letsencrypt # Certbot certificates
       - ../fail2ban/remotelogs/nginx:/var/log/nginx
-
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost"]
@@ -26,7 +25,8 @@ services:
       timeout: 10s
       retries: 3
     networks:
-      - mediamanagement_default
+      - radarr_default
+      - qbittorrent_default
       - plex_default
       - portainer_network
       - network-map_default
@@ -49,9 +49,13 @@ services:
     networks:
       - nginx-proxy_default
 
+# networks:
+#   nginx-proxy_default
 
 networks:
-  mediamanagement_default:
+  qbittorrent_default:
+    external: true
+  radarr_default:
     external: true
   plex_default:
     external: true

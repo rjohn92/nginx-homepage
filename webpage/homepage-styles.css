@@ -1,16 +1,36 @@
+ /* Styles for the Login button in the top-right corner */
+/* Make sure to override visited states, too */
+.login-button:link,
+.login-button:visited,
+.login-button:hover,
+.login-button:active {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+.login-button:hover {
+  background-color: #0056b3;
+}
 /* General Styles */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
-    text-align: center;
-    margin: 0;
-    padding: 0;
+    position: relative; 
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-}
+    margin: 0;
+    background-color: #f8f9fa;
+    text-align: center;
+    font-family: Arial, sans-serif;
+  }
 
 /* Container for services */
 .service-links {
