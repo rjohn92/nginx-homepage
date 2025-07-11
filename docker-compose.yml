@@ -33,7 +33,7 @@ services:
       - pihole_default
       - bibliomane_default
       - nginx-proxy_default
-      - keycloak_oauth2_network
+      - sso-net
 
   certbot:
     image: certbot/certbot
@@ -69,5 +69,5 @@ networks:
     external: true
   nginx-proxy_default:
     external: true
-  keycloak_oauth2_network:
+  sso-net:
     external: true
