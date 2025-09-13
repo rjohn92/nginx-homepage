@@ -1,8 +1,7 @@
-version: '3.8'
 services:
   nginx:
     image: nginx:latest
-    container_name: nginx
+    # container_name: nginx
     environment:
       - NGINX_SERVER_NAME=${NGINX_SERVER_NAME}
       - CONTAINERS_LOCATION=${CONTAINERS_LOCATION}
@@ -19,28 +18,24 @@ services:
       - ./certs:/etc/letsencrypt # Certbot certificates
       - ../fail2ban/remotelogs/nginx:/var/log/nginx
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
     networks:
-      - radarr_default
-      - qbittorrent_default
-      - plex_default
-      - portainer_network
-      - network-map_default
-      - pihole_default
-      - bibliomane_default
-      - nginx-proxy_default
-      - sso-net
+      radarr_default: {}
+      qbittorrent_default: {}
+      plex_default: {}
+      portainer_network: {}
+      pihole_default: {}
+      bibliomane_default: {}
+      nginx-proxy_default: {}
+      sso-net:
+        aliases:
+          - arjayserver.duckdns.org
 
   certbot:
     image: certbot/certbot
     container_name: certbot
-    depends_on:
-      nginx:
-        condition: service_healthy
+    # depends_on:
+    #   nginx:
+    #     condition: service_healthy
     volumes:
       - ./certs:/etc/letsencrypt
       - ./webpage:/usr/share/nginx/html
@@ -61,8 +56,8 @@ networks:
     external: true
   portainer_network:
     external: true
-  network-map_default:
-    external: true
+  # network-map_default:
+  #   external: true
   pihole_default:
     external: true
   bibliomane_default:
