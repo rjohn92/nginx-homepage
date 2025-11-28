@@ -26,9 +26,10 @@ services:
       pihole_default: {}
       bibliomane_default: {}
       nginx-proxy_default: {}
+      monitoring_default: {}
       sso-net:
         aliases:
-          - arjayserver.duckdns.org
+          - ${DOMAIN_NAME}
 
   certbot:
     image: certbot/certbot
@@ -65,4 +66,6 @@ networks:
   nginx-proxy_default:
     external: true
   sso-net:
+    external: true
+  monitoring_default:
     external: true
