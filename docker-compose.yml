@@ -29,6 +29,7 @@ services:
       bibliomane_default: {}
       nginx-proxy_default: {}
       monitoring_default: {}
+      jellyfin_default: {}
       sso-net:
         aliases:
           - ${DOMAIN_NAME}
@@ -61,6 +62,8 @@ networks:
     external: true
   # network-map_default:
   #   external: true
+  jellyfin_default:
+    external: true
   pihole_default:
     external: true
   bibliomane_default:

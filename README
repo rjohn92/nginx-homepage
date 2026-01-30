@@ -2,7 +2,17 @@
 readme_content = """
 Nginx Reverse Proxy with SSL for Plex, qBittorrentVPN, Radarr, and Portainer
 
-This project configures Nginx as a reverse proxy with SSL for several services running in Docker containers, including Plex, qBittorrentVPN, Radarr, and Portainer. It also serves a custom landing page as the root of your Nginx server and ensures that these services are only accessible through Nginx for security.
+This project configures Nginx as a reverse proxy with SSL for several services running in Docker containers, including Plex, qBittorrentVPN, Radarr, and Portainer. It also serves a custom landing page as the root of your Nginx server and ensures that these services are only accessible through Nginx for security. 
+
+Important: This is a single sign-on (SSO) config. If configured correctly you should see this functionality:
+
+- enter your domain into a browser (google chrome, microsoft edge, firefox, etc)
+- You should be met with a sign on page where you enter your credentials
+- Before entering your credentials try to access other subpaths (qbittorrent, bibliomane, grafana, etc.)
+- If you cannot access them and are met with a login page that is a good thing
+- Enter your credentials
+- You should be able to login everywhere now
+The /logout path is a nice touch I implemented. This is because it makes sure that 
 
 Table of Contents
 
